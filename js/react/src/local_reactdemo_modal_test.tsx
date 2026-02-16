@@ -13,21 +13,20 @@ async function getString(key, component, params = {}) {
   return str.get_string(key, component, params);
 }
 
-const loadModalForm = async(event) => {
+const loadModalForm = async(props, event) => {
   event?.preventDefault();
   const ModalForm = await requireAmd("core_form/modalform");
-  const contextid = window.M.cfg.contextid ?? 1;
   const modalHeader = await getString("modal_header", "local_reactdemo");
   const form = new ModalForm({
     formClass: "local_reactdemo\\simple2complex_form",
-    args: { contextid: contextid },
+    args: { contextid: props.contextid },
     modalConfig: { title: modalHeader },
     returnFocus: event?.currentTarget ?? null,
   });
   form.show();
 };
 
-function App() {
+function App(props) {
   const [tick, setTick] = React.useState(0);
   window.console.log(tick);
   React.useEffect(() => {
@@ -51,7 +50,7 @@ function App() {
     <div>
       {label || "Hello from my new file"}
       <br />
-      <Button label="Modal form?" onClick={loadModalForm} />
+      <Button label="Modal form?" onClick={() => loadModalForm(props)} />
     </div>
   );
 }
