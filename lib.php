@@ -2,19 +2,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Add react demo link to the frontpage.
+ * This function extends the navigation with the tool items.
+ *
+ * @param navigation_node $navigation
+ * @param stdClass $course
+ * @param context $context
+ * @return void
  */
-function local_reactdemo_before_footer() {
-    global $PAGE;
-
-    if ($PAGE->pagetype === 'local-reactdemo-index') {
-        return;
-    }
-
-    // Add a link under the frontpage navigation.
-    $url  = new moodle_url('/local/reactdemo');
-    echo html_writer::div(
-        html_writer::link($url, get_string('pluginname', 'local_reactdemo'), ['class' => 'btn btn-primary']),
-        'local-reactdemo-home-link mt-3'
-    );
+function local_reactdemo_extend_navigation_frontpage($navigation, $course, $context) {
+    $url  = new moodle_url('/local/reactdemo/index.php', ['courseid' => $course->id]);
+    $settingsnode = navigation_node::create('React demo', $url, navigation_node::TYPE_SETTING,
+        null, null, new pix_icon('i/preview', ''));
+    $navigation->add_node($settingsnode);
 }
